@@ -8,6 +8,21 @@ import os
 from analisis_sentimiento.modelo.prediccion_ejemplo import prediccion
 
 class ComentariosApp(UserControl):
+    # Obtener la ruta del directorio actual del script
+    script_dir = os.path.dirname(__file__)
+
+    # Ruta relativa al directorio del modelo
+    modelo_dir = os.path.join(script_dir, "modelo")
+
+    # Nombre del archivo JSON de credenciales
+    credentials_file = "arctic-shadow-414717-4793025ca06e.json"
+
+    # Ruta completa al archivo JSON de credenciales (usando rutas relativas)
+    credentials_path = os.path.join(modelo_dir, credentials_file)
+
+    # Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
+
     def __init__(self,page):
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
@@ -34,21 +49,7 @@ class ComentariosApp(UserControl):
                     ],
                 )
     def predecir_emocion(self, texto):
-        # Obtener la ruta del directorio actual del script
-        script_dir = os.path.dirname(__file__)
-
-        # Ruta relativa al directorio del modelo
-        modelo_dir = os.path.join(script_dir, "modelo")
-
-        # Nombre del archivo JSON de credenciales
-        credentials_file = "arctic-shadow-414717-4793025ca06e.json"
-
-        # Ruta completa al archivo JSON de credenciales (usando rutas relativas)
-        credentials_path = os.path.join(modelo_dir, credentials_file)
-
-        # Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
-
+        
         # Realizar la predicción de clasificación de texto
         result = prediccion(
             project="143198414809",

@@ -4,3 +4,4 @@ protobuf
 selenium
 torch
 transformers
+google-cloud-aiplatform
