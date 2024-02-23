@@ -114,6 +114,7 @@ class ComentariosApp(UserControl):
 
         # Iniciar el navegador web
         driver = webdriver.Firefox(options=firefox_options)
+        time.sleep(2)
         driver.set_window_position(-10000, -10000)
 
         # Acceder a la publicación

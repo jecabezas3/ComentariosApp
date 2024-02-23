@@ -6,7 +6,7 @@ Esta herramienta está diseñada para realizar un análisis de emociones en los 
 
 Para instalar las dependencias de Python necesarias, puedes ejecutar el siguiente comando:
 ```bash
-cd ComentarioApp
+cd ComentariosApp
 ```
 ```bash
 pip install -r requirements.txt 
@@ -16,7 +16,7 @@ Este comando instalará las bibliotecas necesarias, incluyendo Selenium, Beautif
 
 Para iniciar la herramienta:
 ```bash
-python3 inicio.py
+python inicio.py
 ```
 ## Desarrollo de la Herramienta para Análisis de Emociones
 
