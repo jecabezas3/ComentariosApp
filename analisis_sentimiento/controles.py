@@ -110,7 +110,7 @@ class ComentariosApp(UserControl):
         # Configuración para Firefox con la ruta al geckodriver
         firefox_options = Options()
         firefox_options.headless = True
-        firefox_options.add_argument("--lang=en-US")
+        firefox_options.set_preference("intl.accept_languages", "en-US")
 
         # Iniciar el navegador web
         driver = webdriver.Firefox(options=firefox_options)
