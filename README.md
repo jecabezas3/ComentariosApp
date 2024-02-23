@@ -5,13 +5,19 @@ Esta herramienta está diseñada para realizar un análisis de emociones en los 
 ## Instalación de Dependencias de Python
 
 Para instalar las dependencias de Python necesarias, puedes ejecutar el siguiente comando:
-
 ```bash
-pip install -r requirements.txt
+cd ComentarioApp
+```
+```bash
+pip install -r requirements.txt 
 ```
 
 Este comando instalará las bibliotecas necesarias, incluyendo Selenium, Beautiful Soup y otras dependencias utilizadas en el proyecto.
 
+Para iniciar la herramienta:
+```bash
+python3 inicio.py
+```
 ## Desarrollo de la Herramienta para Análisis de Emociones
 
 La herramienta se desarrolló en Python debido a su versatilidad, facilidad de uso y una amplia comunidad de desarrolladores. Las bibliotecas clave utilizadas en el proyecto son:
