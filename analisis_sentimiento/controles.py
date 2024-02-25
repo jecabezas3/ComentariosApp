@@ -4,25 +4,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 import time
-import os
-from analisis_sentimiento.modelo.prediccion_ejemplo import prediccion
-
+import requests
 class ComentariosApp(UserControl):
-    # Obtener la ruta del directorio actual del script
-    script_dir = os.path.dirname(__file__)
-
-    # Ruta relativa al directorio del modelo
-    modelo_dir = os.path.join(script_dir, "modelo")
-
-    # Nombre del archivo JSON de credenciales
-    credentials_file = "arctic-shadow-414717-4793025ca06e.json"
-
-    # Ruta completa al archivo JSON de credenciales (usando rutas relativas)
-    credentials_path = os.path.join(modelo_dir, credentials_file)
-
-    # Establecer la variable de entorno GOOGLE_APPLICATION_CREDENTIALS
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
-
+    
     def __init__(self,page):
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
@@ -49,58 +33,70 @@ class ComentariosApp(UserControl):
                     ],
                 )
     def predecir_emocion(self, texto):
-        
-        # Realizar la predicción de clasificación de texto
-        result = prediccion(
-            project="143198414809",
-            endpoint_id="5518978824412332032",
-            location="us-central1",
-            content=texto
-        )
+        project_id = "143198414809"
+        endpoint_id = "5518978824412332032"
+        token = "ya29.a0AfB_byC4VFq985Mh-M8ZdMxer5xCDEtJ7akOEE2FIN5ap9t8LiefdFnkuaZcLxlbTk4U0FKvUYnvJAXiY1c4AjpVR5nvp9xLqv7YLZfGTdnK0oADGs4CYmgB9SRT32DuK2hNMAV8Mum6V5xLrm847AnghT321SjTxuNepVcyKH-lCCzveGZBuSKKXMvmvGRcQ5PoRh5BWoqrv7NRqITVbTmRLSBB_FZvs5Dxy0eCsA8rUK-Hor13UIU8Zc8O5l12eWVg8zExp9yHPNEdaTCqJBfavIxPUviZIUR5NYZWyQqCyrOMywKzmKJaaQXMgqoL0xVV2Gpsp9LWEjmlUEqAFQ9LyqzzjbvDidfyZdW-eB89LV9HHJv3-hFb2Vgd_Gs48lue8yYAdhVaLuOcJzq5ACb4uSfBi3IdaCgYKAd8SARISFQHGX2Miigc5fnKf46GnlRyAB0zXRA0423"
+        url = "https://us-central1-aiplatform.googleapis.com/ui/projects/{}/locations/us-central1/endpoints/{}:predict".format(project_id, endpoint_id)
+        headers = {
+            "Authorization": "Bearer {}".format(token),
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "instances": {
+                "mimeType": "text/plain",
+                "content": texto
+            }
+        }
+        respuesta = requests.post(url, headers=headers, json=payload)
+        if respuesta.status_code == 200:
+            resultado = respuesta.json()
+            result = resultado['predictions']
 
-        # Variables para almacenar el valor máximo y su displayName correspondiente
-        max_confidence = float('-inf')  # Inicializar con un valor muy pequeño
-        max_displayName = None
+            # Variables para almacenar el valor máximo y su displayName correspondiente
+            max_confidence = float('-inf')  # Inicializar con un valor muy pequeño
+            max_displayName = None
 
-        # Variables para almacenar la suma de emociones intensas
-        suma_emociones_intensas = 0
+            # Variables para almacenar la suma de emociones intensas
+            suma_emociones_intensas = 0
 
-        # Iterar sobre los elementos de la lista
-        for item in result:
-            # Acceder a los valores del diccionario
-            confidences = item['confidences']
-            displayNames = item['displayNames']
+            # Iterar sobre los elementos de la lista
+            for item in result:
+                # Acceder a los valores del diccionario
+                confidences = item['confidences']
+                displayNames = item['displayNames']
 
-            # Encontrar el índice del valor máximo en confidences, excluyendo ciertos displayNames
-            max_index = max(
-                range(len(confidences)),
-                key=lambda i: confidences[i] if displayNames[i] not in ['Amor nulo', 'Miedo nulo', 'Sorpresa nula', 'Tristeza nula', 'Dolor nulo', 'Vergüenza nula', 'Alegría nula', 'Neutral nulo', 'Enojo nulo', 'Decepción nula'] else float('-inf')
-            )
+                # Encontrar el índice del valor máximo en confidences, excluyendo ciertos displayNames
+                max_index = max(
+                    range(len(confidences)),
+                    key=lambda i: confidences[i] if displayNames[i] not in ['Amor nulo', 'Miedo nulo', 'Sorpresa nula', 'Tristeza nula', 'Dolor nulo', 'Vergüenza nula', 'Alegría nula', 'Neutral nulo', 'Enojo nulo', 'Decepción nula'] else float('-inf')
+                )
 
-            # Obtener el valor máximo de confidences y su respectivo displayName
-            confidence = confidences[max_index]
-            displayName = displayNames[max_index]
+                # Obtener el valor máximo de confidences y su respectivo displayName
+                confidence = confidences[max_index]
+                displayName = displayNames[max_index]
 
-            # Actualizar los valores máximos si el valor actual es mayor
-            if confidence > max_confidence:
-                max_confidence = confidence
-                max_displayName = displayName
+                # Actualizar los valores máximos si el valor actual es mayor
+                if confidence > max_confidence:
+                    max_confidence = confidence
+                    max_displayName = displayName
 
-            # Sumar los valores de emociones intensas específicas
-            for name, conf in zip(displayNames, confidences):
-                if name in ['Miedo intenso', 'Sorpresa intensa', 'Tristeza intensa', 'Dolor intenso', 'Vergüenza intensa', 'Enojo intenso', 'Decepción intensa']:
-                    suma_emociones_intensas += conf
+                # Sumar los valores de emociones intensas específicas
+                for name, conf in zip(displayNames, confidences):
+                    if name in ['Miedo intenso', 'Sorpresa intensa', 'Tristeza intensa', 'Dolor intenso', 'Vergüenza intensa', 'Enojo intenso', 'Decepción intensa']:
+                        suma_emociones_intensas += conf
 
-        # Preparar los mensajes a imprimir
-        intensity_message = f"Intensidad Emocional: {max_displayName}"
-        depression_message = "Sufre depresión" if suma_emociones_intensas > 2 else "No sufre depresión"
-        neutral_message = "No refleja emoción clara" if max_displayName == "Neutral intenso" else ""
+            # Preparar los mensajes a imprimir
+            intensity_message = f"Intensidad Emocional: {max_displayName}"
+            depression_message = "Sufre depresión" if suma_emociones_intensas > 2 else "No sufre depresión"
+            neutral_message = "No refleja emoción clara" if max_displayName == "Neutral intenso" else ""
 
-        # Concatenar los mensajes en un solo string con guiones
-        messages = " - ".join([message for message in [intensity_message, depression_message, neutral_message] if message])
+            # Filtrar mensajes vacíos
+            messages = " - ".join([message for message in [intensity_message, depression_message, neutral_message] if message])
 
-        # Retornar los mensajes
-        return messages
+            # Retornar los mensajes
+            return messages
+        else:
+            raise Exception("Error al realizar la predicción: {}".format(respuesta.status_code))
     
     def get_comentarios(self, url):
         self.nombre_progreso.visible = True
@@ -115,7 +111,7 @@ class ComentariosApp(UserControl):
 
         # Iniciar el navegador web
         driver = webdriver.Firefox(options=firefox_options)
-        time.sleep(2)
+        time.sleep(3)
         driver.set_window_position(-10000, -10000)
 
         # Acceder a la publicación
@@ -148,7 +144,7 @@ class ComentariosApp(UserControl):
         
         #Obtener los post
         publicaciones = []
-        numero_post = 5
+        numero_post = 1
         omit = 0
         self.nombre_progreso.value = "Obteniendo publicaciones......"
         self.nombre_progreso.update()

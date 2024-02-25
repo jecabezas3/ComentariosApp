@@ -2,6 +2,5 @@ beautifulsoup4
 flet
 protobuf
 selenium
-torch
-transformers
 google-cloud-aiplatform
+requests
