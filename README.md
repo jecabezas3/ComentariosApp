@@ -3,7 +3,10 @@
 Esta herramienta está diseñada para realizar un análisis de emociones en los comentarios de publicaciones de Facebook. A continuación, se detalla el proceso de desarrollo y los componentes utilizados.
 
 ## Instalación de Dependencias de Python
+### Version de Pyhton
+Tomar en cuenta que es necesario tener la version de python 3.12.0 en adelante
 
+### Dependencias
 Para instalar las dependencias de Python necesarias, puedes ejecutar el siguiente comando:
 ```bash
 cd ComentariosApp
