@@ -8,21 +8,15 @@ import os
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 from google.auth.transport.requests import AuthorizedSession
-
-class GoogleCloudCredentials:
-    def __init__(self, credentials_file_path):
-        self.credentials = service_account.Credentials.from_service_account_file(credentials_file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
-        self.last_token_refresh_time = time.time()
-
-    def get_access_token(self):
-        if time.time() - self.last_token_refresh_time > 3300:
-            self.credentials.refresh(Request())
-            self.last_token_refresh_time = time.time()
-        return self.credentials.token
 class ComentariosApp(UserControl):
     
-    def __init__(self,page,credentials_file_path):
-        self.google_credentials = GoogleCloudCredentials(credentials_file_path)
+    def __init__(self,page):
+        script_directory = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(script_directory, 'arctic-shadow-414717-4793025ca06e.json')
+        # Cargar las credenciales del archivo token.json
+        self.credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+        # Inicializar el tiempo de la última actualización del token
+        self.last_token_refresh_time = time.time()
            
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
@@ -33,8 +27,12 @@ class ComentariosApp(UserControl):
         self.progress_bar = ProgressBar(width=400, visible=False)
         self.progress_bar.value = 0
     def get_access_token(self):
-        return self.google_credentials.get_access_token()
+        # Obtener un nuevo token solo si ha pasado más de 55 minutos desde la última actualización
+        if time.time() - self.last_token_refresh_time > 3300:  # 3300 segundos = 55 minutos
+            self.credentials.refresh(Request())
+            self.last_token_refresh_time = time.time()
 
+        return self.credentials.token
     def initialize_ui(self):
         return Column(
                     width=600,
