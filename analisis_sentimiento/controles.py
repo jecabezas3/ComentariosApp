@@ -11,6 +11,12 @@ from google.auth.transport.requests import AuthorizedSession
 class ComentariosApp(UserControl):
     
     def __init__(self,page):
+        script_directory = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(script_directory, 'arctic-shadow-414717-4793025ca06e.json')
+
+        # Cargar las credenciales del archivo token.json
+        self.credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+        
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
         self.comentarios_area = ListView(expand=1)
@@ -36,19 +42,9 @@ class ComentariosApp(UserControl):
                     ],
                 )
     def predecir_emocion(self, texto):
-        
-        
-        script_directory = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(script_directory, 'arctic-shadow-414717-4793025ca06e.json')
-
-        # Cargar las credenciales del archivo token.json
-        credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
-
-        # Obtener un token de acceso
-        credentials.refresh(Request())
 
         # Crear una sesión autorizada
-        session = AuthorizedSession(credentials)
+        session = AuthorizedSession(self.credentials)
 
         # Configurar la URL del servicio de predicción específico
         url = 'https://us-central1-aiplatform.googleapis.com/v1/projects/143198414809/locations/us-central1/endpoints/5518978824412332032:predict'
@@ -59,7 +55,9 @@ class ComentariosApp(UserControl):
                 {"content": texto}
             ]
         }
-
+        # Obtener un token de acceso
+        self.credentials.refresh(Request())
+        
         # Realizar una solicitud POST a la URL del servicio de predicción
         respuesta = session.post(url, json=payload)
         if respuesta.status_code == 200:
