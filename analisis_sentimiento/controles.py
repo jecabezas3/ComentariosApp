@@ -13,10 +13,11 @@ class ComentariosApp(UserControl):
     def __init__(self,page):
         script_directory = os.path.dirname(os.path.realpath(__file__))
         file_path = os.path.join(script_directory, 'arctic-shadow-414717-4793025ca06e.json')
-
         # Cargar las credenciales del archivo token.json
         self.credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
-        
+        # Inicializar el tiempo de la última actualización del token
+        self.last_token_refresh_time = time.time()
+           
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
         self.comentarios_area = ListView(expand=1)
@@ -25,6 +26,13 @@ class ComentariosApp(UserControl):
         self.nombre_progreso = Text(value="Comenzado Web Scraping......", weight="bold",visible=False)
         self.progress_bar = ProgressBar(width=400, visible=False)
         self.progress_bar.value = 0
+    def get_access_token(self):
+        # Obtener un nuevo token solo si ha pasado más de 55 minutos desde la última actualización
+        if time.time() - self.last_token_refresh_time > 3300:  # 3300 segundos = 55 minutos
+            self.credentials.refresh(Request())
+            self.last_token_refresh_time = time.time()
+
+        return self.credentials.token
     def initialize_ui(self):
         return Column(
                     width=600,
@@ -55,11 +63,12 @@ class ComentariosApp(UserControl):
                 {"content": texto}
             ]
         }
-        # Obtener un token de acceso
-        self.credentials.refresh(Request())
+        # Obtener un nuevo token antes de la solicitud
+        access_token = self.get_access_token()
+        headers = {'Authorization': f'Bearer {access_token}'}
         
         # Realizar una solicitud POST a la URL del servicio de predicción
-        respuesta = session.post(url, json=payload)
+        respuesta = session.post(url, json=payload, headers=headers)
         if respuesta.status_code == 200:
             resultado = respuesta.json()
             result = resultado['predictions']
