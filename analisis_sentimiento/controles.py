@@ -17,7 +17,6 @@ class ComentariosApp(UserControl):
         self.credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
         # Inicializar el tiempo de la última actualización del token
         self.last_token_refresh_time = time.time()
-           
         self.url_input = TextField(hint_text="Ingresa el nombre de la página de Facebook")
         self.analyze_button = ElevatedButton(text="Obtener Comentarios", on_click=self.analyze_data)
         self.comentarios_area = ListView(expand=1)
@@ -166,7 +165,7 @@ class ComentariosApp(UserControl):
         
         #Obtener los post
         publicaciones = []
-        numero_post = 6
+        numero_post = 5
         omit = 0
         self.nombre_progreso.value = "Obteniendo publicaciones......"
         self.nombre_progreso.update()
