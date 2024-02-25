@@ -159,7 +159,7 @@ class ComentariosApp(UserControl):
         
         #Obtener los post
         publicaciones = []
-        numero_post = 1
+        numero_post = 6
         omit = 0
         self.nombre_progreso.value = "Obteniendo publicaciones......"
         self.nombre_progreso.update()
