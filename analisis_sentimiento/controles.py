@@ -4,7 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 import time
-import requests
+import os
+from google.oauth2 import service_account
+from google.auth.transport.requests import Request
+from google.auth.transport.requests import AuthorizedSession
 class ComentariosApp(UserControl):
     
     def __init__(self,page):
@@ -33,21 +36,32 @@ class ComentariosApp(UserControl):
                     ],
                 )
     def predecir_emocion(self, texto):
-        project_id = "143198414809"
-        endpoint_id = "5518978824412332032"
-        token = "ya29.a0AfB_byC4VFq985Mh-M8ZdMxer5xCDEtJ7akOEE2FIN5ap9t8LiefdFnkuaZcLxlbTk4U0FKvUYnvJAXiY1c4AjpVR5nvp9xLqv7YLZfGTdnK0oADGs4CYmgB9SRT32DuK2hNMAV8Mum6V5xLrm847AnghT321SjTxuNepVcyKH-lCCzveGZBuSKKXMvmvGRcQ5PoRh5BWoqrv7NRqITVbTmRLSBB_FZvs5Dxy0eCsA8rUK-Hor13UIU8Zc8O5l12eWVg8zExp9yHPNEdaTCqJBfavIxPUviZIUR5NYZWyQqCyrOMywKzmKJaaQXMgqoL0xVV2Gpsp9LWEjmlUEqAFQ9LyqzzjbvDidfyZdW-eB89LV9HHJv3-hFb2Vgd_Gs48lue8yYAdhVaLuOcJzq5ACb4uSfBi3IdaCgYKAd8SARISFQHGX2Miigc5fnKf46GnlRyAB0zXRA0423"
-        url = "https://us-central1-aiplatform.googleapis.com/ui/projects/{}/locations/us-central1/endpoints/{}:predict".format(project_id, endpoint_id)
-        headers = {
-            "Authorization": "Bearer {}".format(token),
-            "Content-Type": "application/json"
-        }
+        
+        
+        script_directory = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(script_directory, 'arctic-shadow-414717-4793025ca06e.json')
+
+        # Cargar las credenciales del archivo token.json
+        credentials = service_account.Credentials.from_service_account_file(file_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+
+        # Obtener un token de acceso
+        credentials.refresh(Request())
+
+        # Crear una sesión autorizada
+        session = AuthorizedSession(credentials)
+
+        # Configurar la URL del servicio de predicción específico
+        url = 'https://us-central1-aiplatform.googleapis.com/v1/projects/143198414809/locations/us-central1/endpoints/5518978824412332032:predict'
+
+        # Configurar el payload de predicción
         payload = {
-            "instances": {
-                "mimeType": "text/plain",
-                "content": texto
-            }
+            "instances": [
+                {"content": texto}
+            ]
         }
-        respuesta = requests.post(url, headers=headers, json=payload)
+
+        # Realizar una solicitud POST a la URL del servicio de predicción
+        respuesta = session.post(url, json=payload)
         if respuesta.status_code == 200:
             resultado = respuesta.json()
             result = resultado['predictions']
@@ -145,7 +159,7 @@ class ComentariosApp(UserControl):
         
         #Obtener los post
         publicaciones = []
-        numero_post = 6
+        numero_post = 1
         omit = 0
         self.nombre_progreso.value = "Obteniendo publicaciones......"
         self.nombre_progreso.update()

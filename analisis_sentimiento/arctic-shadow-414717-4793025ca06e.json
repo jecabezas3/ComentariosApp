@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "arctic-shadow-414717",
+  "private_key_id": "4793025ca06eca7ad008004725750edea39893f3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDeaQ5x/rYKNke5\nz//aN4uYu7u2gupn8/gI60J8ZIUDEoxD/FOjEF3ykwoGQYdlf5OaRIWCADGdFpo0\nNQzC9EnL93JJq5n6l9Kk3JiX2gjCrNuDp++AsyZflCeF7W6YfMdz/eIhl1NPKpuL\nRKVEaVKpSVnsZO4e2l/w+tbBrCTxPEqqB1xrQl2ARg3C3scbYsWwaMdrMwV0bTbZ\n4pD15sFaIsXhSn/l21vgKn3l9qv5s76c9lIqTtwiIEM8Cv43NUjY71tDYPcIB5vy\nEucFCQObwqL+E+pTaRGDuOG7xSNTbobGIWGgwzYNWrvCErfpjZ8+tO5QCKV3LMX2\nv4/62OO7AgMBAAECggEAQV2E5lHitHuhduW/nyWl/FxoXcp6E9Uq94wU/TQZt35z\nBOQavJjp04oNbytBHL5y5ervhfaCnlVvOprAxmc/bRerWiV52qFWQienHTHyUyy0\nUyw/AockZwDG4OCYGW7Ku7dJB3BPBrxR/ItPOxztM12gdQ5wwVaSzeMazM7ICLGQ\nOveid3CedqeWPIaC9NMkqjebeaHkz7ViV4NC4L51zAuzJqslRb60IP5htWSCFgyJ\nv+O3ZQPakHppn1krVFB5/49NRN99auuH6DJ5I4yv2ylYolhpItoQ5IuSPue5jn/r\newfKtRAfAyq2qh8mWRme1IRtjbOaJ3vqtFHUFrMi4QKBgQD1pIn5ri1y6Car/Mfn\nvyizvdmVg9qdeYDNWBbVeghb3DooYvuhIYVy3xE8ROFzxQa3I1zeeOuZc6yaynre\nUfhFwKftIZJ54qySEmna7AGQsdbMTMNG6vVKixHPxSV0y+/fme9SpkdSUddck7F4\nxJjPTAVoe5ysjRThjWOWTY2HcQKBgQDnyb+A0Lz1BiwaW/Mt8jPNsWBLci3omn5w\n2731I/8qRfJNQ2yu086HVPw+7yOAShD3u46W3WDEcCgcKL5ok/4MR0yJSJERGNlw\ndUKOGQgKpaRjbEfHsHKOzumRf52WwwTu7pZvufHSEJRz/0q9EwODYEfZ6FfTLglZ\naPd9NkT/6wKBgFLm0wIG/KO5IcQNrdHSvAPdYN+K/m8DIKssvZgSdVu7OY2DynSZ\nAZbBHen/PS97IUcRkjgrCyhg17HuAAWkGGxCFup62Bp2m9M4j60o1WZl/p44kfcP\nOPWNdddvK7L9WNlX9GMqZwurP0mpNs4RW5kqiPC4Nyos+w0cUK3bQpahAoGAaCde\n9zpU/mFkpf+VeZrxLke7Nou7F19826fSZvpi6ZL+uztF9hVVI7jLlFgPAtHFaByO\niTo3Bm5Dh8vDK+j8anYLbVD/ZshcxMzcOFAFLguan9aDNrcR8xwFFo1auekuKVNq\npA/RGwy6OJmJ8wY9OOalwsRF2q5AIz4on8ooHTsCgYEA0A0PSZVKjzUjOdkLRsmE\nmNuQ80PrZApeV2gsqFjkoScvOm1D7kuidMqwKdi2ZTy7x2IBD2q/2YYzyytUqMzv\nGGG5oIHPY2l31CImSWh2lJjiEk57+W+th5zUm71Ltpq4TeMpn1rk5jX4IsapDn+2\nQuzpmRLAZtcP1JxlYk8HdEQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "vertexai@arctic-shadow-414717.iam.gserviceaccount.com",
+  "client_id": "108652406475664592845",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vertexai%40arctic-shadow-414717.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
