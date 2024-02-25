@@ -21,7 +21,7 @@ class ComentariosApp(UserControl):
                     width=600,
                     spacing=25,
                     controls=[
-                        Row([Text(value="Analisis de Sentimientos en Entornos Virtuales", style="headlineMedium")], alignment="center"),
+                        Row([Text(value="Analisis de Sentimientos en Entornos Digitales", style="headlineMedium")], alignment="center"),
                         self.url_input,
                         self.texto,
                         Divider(),
@@ -117,11 +117,12 @@ class ComentariosApp(UserControl):
         # Acceder a la publicación
         try:
             driver.get(url)
+            time.sleep(3)
             post = driver.find_element(By.XPATH, "//div[contains(@class,'x6s0dn4 x78zum5 xvrxa7q x9w375v xxfedj9 x1roke11 x1es02x0')]")
         except:
             self.texto.visible = True
             self.texto.update()
-            self.texto.value = "No existe el Post - Verifique que sea una Pagina Publica de Facebook"
+            self.texto.value = "No existe el Post - Verifique que sea un Post Publico de Facebook"
             self.texto.update()
             self.nombre_progreso.visible = False
             self.nombre_progreso.update()
@@ -150,7 +151,19 @@ class ComentariosApp(UserControl):
         self.nombre_progreso.update()
         # Obtener la cantidad total de publicaciones
         while len(publicaciones) != numero_post:
-            publicacion = driver.find_element(By.XPATH, "//span[contains(@class,'x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1nxh6w3 x1sibtaa xo1l8bm xi81zsa x1yc453h')]")
+            try:
+                publicacion = driver.find_element(By.XPATH, "//span[contains(@class,'x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1nxh6w3 x1sibtaa xo1l8bm xi81zsa x1yc453h')]")
+            except:
+                self.texto.visible = True
+                self.texto.update()
+                self.texto.value = "No existe el Post - Verifique que sea un Post Publico de Facebook"
+                self.texto.update()
+                self.nombre_progreso.visible = False
+                self.nombre_progreso.update()
+                self.progress_bar.visible = False
+                self.progress_bar.update()
+                driver.quit()
+                return
             link = publicacion.find_element(By.XPATH, ".//a[contains(@class,'x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz x1heor9g xt0b8zv xo1l8bm')]").get_attribute('href')
             if link in publicaciones:
                 omit+=1
