@@ -37,7 +37,7 @@ class ComentariosApp(UserControl):
                     width=600,
                     spacing=25,
                     controls=[
-                        Row([Text(value="Analisis de Sentimientos en Entornos Digitales", style="headlineMedium")], alignment="center"),
+                        Row([Text(value="Análisis de Emociones en Entornos Digitales", style="headlineMedium")], alignment="center"),
                         self.url_input,
                         self.texto,
                         Divider(),
@@ -123,7 +123,7 @@ class ComentariosApp(UserControl):
         self.nombre_progreso.update()
         self.texto.visible = False
         self.texto.update()
-        
+        estudiante = 1
         # Configuración para Firefox con la ruta al geckodriver
         firefox_options = Options()
         firefox_options.headless = True
@@ -237,6 +237,7 @@ class ComentariosApp(UserControl):
                     imagen = None
                 if imagen is not None:
                     nombre = comentario.find_element(By.XPATH, ".//span[contains(@class,'x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1nxh6w3 x1sibtaa x1s688f xzsf02u')]").text
+                    #nombre = "Estudiante " + str(estudiante)
                     texto_comentario = comentario.find_element(By.XPATH, ".//div[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs']").text
                     sentimiento = self.predecir_emocion(texto_comentario)
                     if see_more_button:
@@ -251,6 +252,7 @@ class ComentariosApp(UserControl):
                         texto_comentario = comentario.find_element(By.XPATH, ".//div[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs']").text
                         sentimiento = self.predecir_emocion(texto_comentario)
                     matriz_comentarios.append((nombre, texto_comentario,sentimiento))
+                    estudiante += 1
                 else:
                     comentarios_omitidos += 1
             # Imprimir comentarios omitidos

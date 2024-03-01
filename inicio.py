@@ -3,7 +3,7 @@ from flet import Page
 from analisis_sentimiento.controles import ComentariosApp
 
 def create_app(page: Page):
-    page.title = "Analisis de Sentimientos"
+    page.title = "Análisis de Emociones"
     page.horizontal_alignment = "center"
     page.scroll = "adaptive"
 
